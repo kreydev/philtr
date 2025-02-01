@@ -1,0 +1,20 @@
+#ifndef _TREK_H_
+#define _TREK_H_
+
+#include <string>
+#include <vector>
+#include "attr.h"
+
+class Trek {
+private:
+    int id;
+    std::string diff;
+    std::vector<Attr> attrs;
+    std::vector<std::string> activ;
+public:
+    Trek(int _id, const std::string& _diff, const std::vector<Attr>& _attrs) : id(_id), diff(_diff), attrs(_attrs) {};
+    void AddAttr(const Attr& _attr) {attrs.push_back(_attr);}
+    void AddActiv(const std::string _activ) {activ.push_back(_activ);}
+};
+
+#endif

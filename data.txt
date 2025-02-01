@@ -1,0 +1,4 @@
+itinerary number
+difficulty
+attributes
+activities
