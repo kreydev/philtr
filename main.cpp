@@ -19,20 +19,22 @@ int main(int argc, char** argv) {
     std::cin >> year;
 
     // ask for attribute names
-    std::vector<Attr> attrList;
+    std::vector<std::string> attrList;
     std::string attrGet;
+    std::cout << std::endl;
+    std::cin.clear();
     while (true) {
         std::cout << "Enter attribute name (s to stop): ";
         std::getline(std::cin, attrGet);
         if (attrGet == "s") {break;}
-        attrList.push_back(Attr(attrGet));
+        attrList.push_back(attrGet);
     }
 
     // save attribute names to a file
     std::ofstream attrOut("./" + datadir + "/" + year + "attrs.txt");
     if (!attrOut.is_open()) {std::cerr << "./" + datadir + "/" + year + "attrs.txt is inaccessable."; return 1;}
     for (int i = 0; i < attrList.size(); i++) {
-        attrOut << attrList[i].GetName() << std::endl;
+        attrOut << attrList[i] << std::endl;
     }
     std::cout << "Attribute names saved." << std::endl;
     attrOut.close();
@@ -40,6 +42,7 @@ int main(int argc, char** argv) {
     // ask for activity names
     std::vector<std::string> activList;
     std::string activGet;
+    std::cout << std::endl;
     while (true) {
         std::cout << "Enter activity name (s to stop): ";
         std::getline(std::cin, activGet);
@@ -60,23 +63,49 @@ int main(int argc, char** argv) {
     std::cout << "Number of treks to enter: ";
     int trekc;
     std::cin >> trekc;
-    std::vector<Trek> trekList(trekc);
+    std::vector<Trek> trekList;
+    std::ofstream numFile("./" + datadir + "/" + year + "num.txt");
+    if (!numFile.is_open()) {std::cerr << "./" + datadir + "/" + year + "num.txt is inaccessable."; return 1;}
+    numFile << trekc;
+    numFile.close();
 
-    // ask for trek attrs
-    
-
-    // ask for trek activities
-    std::cout << "--- Trek Activities ---";
+    // ask for trek details
+    std::cout << "--- Trek Details ---" << std::endl;
     for (int i = 0; i < trekc; i++) {
-        for (int j = 0; j < activList.size(); i++) {
-            std::cout << "Has " + activList[j] + " (y/n) ?";
+        std::string diff;
+        std::cout << "Difficulty of Trek " << i+1 << ": ";
+        std::cin >> diff;
+        std::cout << std::endl;
+        trekList.push_back(Trek(i+1));
+        for (int j = 0; j < attrList.size(); j++) {
+            std::cout << "Trek " << i+1 << " value of " + attrList[j] + ": ";
+            int attrVal;
+            std::cin >> attrVal;
+            trekList.back().AddAttr(Attr(attrList[j], attrVal));
+        }
+        for (int j = 0; j < activList.size(); j++) {
+            std::cout << "Trek " << i+1 << ": has " + activList[j] + " (y/n)? ";
             char yn;
             std::cin >> yn;
             if (yn == 'y') {
-                trekList[i].AddActiv(activList[i]);
+                trekList.back().AddActiv(activList[j]);
             }
         }
     }
+
+    // ask for trek activities
+    //std::cout << "--- Trek Activities ---" << std::endl;
+    //for (int i = 0; i < trekc; i++) {
+    //    trekList.push_back(Trek(i+1));
+    //    for (int j = 0; j < activList.size(); j++) {
+    //        std::cout << "Trek " << i+1 << ": has " + activList[j] + " (y/n)? ";
+    //        char yn;
+    //        std::cin >> yn;
+    //        if (yn == 'y') {
+    //            trekList.back().AddActiv(activList[j]);
+    //        }
+    //    }
+    //}
 
     // save treks to files
 
